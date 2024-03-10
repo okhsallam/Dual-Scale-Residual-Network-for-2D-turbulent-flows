@@ -1,0 +1,148 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+  =========                 |
+  \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox
+   \\    /   O peration     | Website:  https://openfoam.org
+    \\  /    A nd           | Version:  10
+     \\/     M anipulation  |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    format      ascii;
+    class       volVectorField;
+    location    "1";
+    object      U;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+dimensions      [0 1 -1 0 0 0 0];
+
+internalField   uniform (0 0 0);
+
+#include "../system/parameters"
+
+boundaryField
+{
+    left
+    {
+    /*
+	type            fixedValue;
+	value      uniform (1 0  0) ;
+	*/
+	type fixedValue;
+	value #codeStream
+	{
+	codeInclude
+	#{
+	#include "fvCFD.H"
+	#};
+	
+	codeOptions
+	#{
+	-I$(LIB_SRC)/finiteVolume/lnInclude \
+	-I$(LIB_SRC)/meshTools/lnInclude
+	#};
+	
+	codeLibs
+	#{
+	-lmeshTools \
+	-lfiniteVolume
+	#};
+	
+		
+	code
+	#{
+	
+	const IOdictionary& d = static_cast<const IOdictionary&>
+	(
+	dict.parent().parent()
+	);
+	const fvMesh& mesh = refCast<const fvMesh>(d.db());
+	const label id = mesh.boundary().findPatchID("left");
+	const fvPatch& patch = mesh.boundary()[id];
+	vectorField U(patch.size(), vector(0, 0, 0));
+
+
+	
+	forAll(U, i) 
+	{
+	const scalar y = patch.Cf()[i][1];
+	
+	if (y >0.5  &&  y < 1.5 )
+	{
+	
+	
+	U[i] = vector($U0,0,0);
+	
+	}
+	
+	
+	if (y < -0.5  &&  y >-1.5 )
+	{
+	
+	
+	U[i] = vector($U0,0,0);
+	
+	}
+	
+	
+	}
+	
+	
+	
+	
+	
+	writeEntry(os, "", U);
+	
+	#};
+
+
+};
+
+ 
+    }
+    
+    
+    
+       top
+    {
+           type            noSlip;
+        // type            cyclic;
+    }
+    
+    
+    bottom
+    {
+       // type            cyclic;
+       type            noSlip;
+       
+       
+    }
+    
+    right
+    {
+       // type            zeroGradient;
+       
+       
+         type            inletOutlet;
+        inletValue      uniform (0 0 0);
+        value           uniform ($U0 0 0);
+        
+    }
+    
+    
+    
+ 
+    front
+    {
+        type            empty;
+    }
+    back
+    {
+        type            empty;
+    }
+ 
+ 
+}
+
+
+// ************************************************************************* //
