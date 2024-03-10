@@ -1,0 +1,10 @@
+  vorticityFunction
+    {
+        type            vorticity;
+        libs            ("libfieldFunctionObjects.so");
+        writeControl    writeTime;
+      //  patches         (wall);
+    }
+    
+    
+    

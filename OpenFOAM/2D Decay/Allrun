@@ -1,0 +1,23 @@
+#!/bin/sh
+cd ${0%/*} || exit 1    # Run from this directory
+
+# Source tutorial run functions
+. $WM_PROJECT_DIR/bin/tools/RunFunctions
+
+# Get application name
+application=$(getApplication)
+
+runApplication blockMesh
+runApplication boxTurb
+runApplication decomposePar -cellDist
+runParallel $application
+
+
+runApplication reconstructPar
+
+runApplication -s enstrophy  postProcess -func enstrophy
+
+#foamToVTK -fields '(U vorticity)' -useTimeName
+
+
+#------------------------------------------------------------------------------

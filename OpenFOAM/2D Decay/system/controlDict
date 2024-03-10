@@ -1,0 +1,220 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+  =========                 |
+  \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox
+   \\    /   O peration     | Website:  https://openfoam.org
+    \\  /    A nd           | Version:  10
+     \\/     M anipulation  |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    format      ascii;
+    class       dictionary;
+    location    "system";
+    object      controlDict;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+application     pimpleFoam;
+
+startFrom       latestTime;
+
+startTime       0;
+
+stopAt          endTime;
+
+
+endTime         50;
+
+deltaT          0.0001;
+
+writeControl    adjustableRunTime;
+
+//writeInterval   0.5;
+writeInterval   0.2;
+
+purgeWrite      0;
+
+writeFormat     binary;
+
+writePrecision  6;
+
+writeCompression off;
+
+timeFormat      general;
+
+timePrecision   6;
+
+runTimeModifiable yes;
+
+adjustTimeStep  yes;
+
+maxCo          0.7;
+
+
+maxDeltaT       0.1;
+
+
+functions
+
+{
+
+
+#include "vorticity"
+
+#include "mag"
+  
+
+ 
+ /*
+enstrophy
+{
+	type            enstrophy;
+	libs            ("libfieldFunctionObjects.so");
+
+	//U               U;
+	//field           $U;
+
+	executeControl  writeTime;
+	writeControl    writeTime;
+
+}
+    */
+    
+    /*
+   Q
+{
+	type            Q;
+	libs            ("libfieldFunctionObjects.so");
+
+
+	executeControl  writeTime;
+	writeControl    writeTime;
+
+}
+    
+       turbulenceIntensity
+{
+	type            turbulenceIntensity;
+	libs            ("libfieldFunctionObjects.so");
+
+
+	executeControl  writeTime;
+	writeControl    writeTime;
+
+}
+*/
+
+    /*
+       enstrophy
+{
+	type            enstrophy;
+	libs            ("libfieldFunctionObjects.so");
+
+
+	executeControl  writeTime;
+	writeControl    writeTime;
+
+}
+
+*/
+
+  /*
+
+    U_Mag
+{
+	type            mag;
+	libs            ("libfieldFunctionObjects.so");
+
+
+	field          U;
+
+	executeControl  writeTime;
+	writeControl    writeTime;
+
+}
+
+  */  
+    
+    /*
+enstrophy_mean
+{
+    // Mandatory entries (unmodifiable)
+    type                volFieldValue;
+    libs            ("libfieldFunctionObjects.so");
+
+    // Mandatory entries (runtime modifiable)
+
+        fields          (enstrophy);
+        operation       sum;
+        regionType      all;
+        writeFields     no;
+        writeToFile     true;
+        writeControl    runTime;
+        writeInterval   0.1;
+
+    
+}
+*/
+
+
+/*
+U_Mag_mean
+{
+    // Mandatory entries (unmodifiable)
+    type                volFieldValue;
+    libs            ("libfieldFunctionObjects.so");
+
+    // Mandatory entries (runtime modifiable)
+
+
+        fields          (magSqr(U));
+
+       // magSqr
+        operation       sum;
+
+     //  operation sumMag ;
+        
+        regionType      all;
+        writeFields     no;
+        writeToFile     true;
+        writeControl    runTime;
+        writeInterval   0.01;
+
+    
+}
+
+
+   point_probes
+    {
+        libs            ("libsampling.so");
+        type            probes;
+        name            point_probes;
+        writeControl    runTime;
+        writeInterval   0.01;
+        fields          (U);
+        probeLocations
+        (
+            ( 1.0  3.14    0     )
+            ( 5.0  3.14    0 )
+             ( 3.14 1.0   0     )
+            (  3.14  5.0  0 )
+            
+
+        );
+    }
+    
+    */
+
+
+
+}
+// ************************************************************************* //
+
+
+
+
+
+
+
+
+

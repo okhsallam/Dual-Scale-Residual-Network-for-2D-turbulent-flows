@@ -1,0 +1,106 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+  =========                 |
+  \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox
+   \\    /   O peration     | Website:  https://openfoam.org
+    \\  /    A nd           | Version:  10
+     \\/     M anipulation  |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    format      ascii;
+    class       dictionary;
+    object      blockMeshDict;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+convertToMeters 1;
+
+#include "parameters"
+
+vertices
+(
+    ($x_min $y_min $z_min)
+    ($x_max $y_min $z_min)
+    ($x_max $y_max $z_min)
+    ($x_min $y_max $z_min)
+    ($x_min $y_min $z_max)
+    ($x_max $y_min $z_max)
+    ($x_max $y_max $z_max)
+    ($x_min $y_max $z_max)
+);
+
+blocks
+(
+    hex (0 1 2 3 4 5 6 7) ($Grid_x $Grid_y 1) simpleGrading (1 1 1)
+);
+
+boundary
+(
+    top
+    {
+    
+
+    
+ 
+        type cyclic;
+         neighbourPatch bottom;
+        faces
+        (
+            (3 7 6 2)
+        );
+    }
+    
+       bottom
+    {
+
+    
+        type cyclic;
+         neighbourPatch top;
+        
+        faces
+        (
+            (0 1 4 5)
+        );
+    }
+    
+    
+    
+           left
+    {
+         type cyclic;
+         neighbourPatch right;
+         
+         
+        faces
+        (
+            (0 3 4 7)
+        );
+    }
+    
+    
+           right
+    {
+         type cyclic;
+         neighbourPatch left;
+         
+         
+        faces
+        (
+            (1 2 5 6)
+        );
+    }
+    
+    
+    frontAndBack
+    {
+        type empty;
+        faces
+        (
+            (0 3 2 1)
+            (4 5 6 7)
+        );
+    }
+);
+
+
+// ************************************************************************* //
